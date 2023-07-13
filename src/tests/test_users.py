@@ -50,8 +50,8 @@ def test_when_user_missing_required_attributes_return_bad_request(test_app, test
     assert "is a required property" in errors["username"]
     assert "is a required property" in errors["email"]
 
-def test_get_user(test_app, test_database):
-    user = User("bubba", "bubba@bubba.com")
+def test_get_user(test_app, test_database, add_user):
+    user = add_user("bubba", "bubba@bubba.com")
 
     db.session.add(user)
     db.session.commit()
@@ -74,3 +74,20 @@ def test_when_user_doesnt_exist_return_not_found(test_app, test_database):
     response = client.get(f"/users/9999")
 
     assert response.status_code == 404
+
+def test_get_users(test_app, test_database, add_user):
+    test_database.session.query(User).delete()
+
+    for i in range(1, 3):
+        add_user(f"user{i}", f"user{i}@x.com")
+
+    client = test_app.test_client()
+
+    response = client.get(f"/users")
+    data = json.loads(response.data.decode())
+
+    assert response.status_code == 200
+    assert len(data) == 2
+
+    for i, d in enumerate(data):
+        print(f"{i}, {data}")

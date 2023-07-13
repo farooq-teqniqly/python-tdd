@@ -1,6 +1,6 @@
 import pytest
 
-from src import app, db
+from src import app, db, User
 
 @pytest.fixture(scope="module")
 def test_app():
@@ -16,3 +16,13 @@ def test_database():
     db.session.remove()
     db.drop_all()
 
+
+@pytest.fixture(scope="function")
+def add_user():
+    def _add_user(username, email):
+        user = User(username, email)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+    return _add_user
