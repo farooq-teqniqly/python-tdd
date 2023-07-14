@@ -2,6 +2,7 @@ import json
 
 from src import User, db
 def test_add_user(test_app, test_database):
+    test_database.session.query(User).delete()
     client = test_app.test_client()
 
     response = client.post(
@@ -66,7 +67,7 @@ def test_get_user(test_app, test_database, add_user):
     assert "bubba" in data["username"]
     assert "bubba@bubba.com" in data["email"]
     assert data["id"] > 0
-    assert data["created_date"] is None
+    assert data["created_date"] is not None
 
 def test_when_user_doesnt_exist_return_not_found(test_app, test_database):
     client = test_app.test_client()

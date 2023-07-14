@@ -3,6 +3,7 @@ import os
 from flask import  Flask, jsonify, request
 from flask_restx import Resource, Api, fields
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,6 +18,7 @@ class User(db.Model):
     username = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
     active = db.Column(db.Boolean(), default=True, nullable=False)
+    created_date = db.Column(db.DateTime(), default=func.now(), nullable=False)
 
     def __init__(self, username, email):
         self.username = username
