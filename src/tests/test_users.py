@@ -67,8 +67,6 @@ def test_get_users(test_app, test_database, add_user, test_client):
     for i in range(1, 3):
         add_user(f"user{i}", f"user{i}@x.com")
 
-    # client = test_app.test_client()
-
     response = test_client.get(f"/users")
     data = json.loads(response.data.decode())
 
