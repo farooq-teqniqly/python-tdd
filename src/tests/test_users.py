@@ -2,7 +2,6 @@ import json
 
 from src import User, db
 def test_add_user(test_app, test_database):
-    test_database.session.query(User).delete()
     client = test_app.test_client()
 
     response = client.post(
@@ -79,8 +78,6 @@ def test_when_user_doesnt_exist_return_not_found(test_app, test_database):
     assert response.status_code == 404
 
 def test_get_users(test_app, test_database, add_user):
-    test_database.session.query(User).delete()
-
     for i in range(1, 3):
         add_user(f"user{i}", f"user{i}@x.com")
 
