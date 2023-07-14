@@ -4,12 +4,9 @@ import json
 def test_add_user(test_app, test_database, test_client):
     response = test_client.post(
         "/users",
-        data=json.dumps(
-            {
-                "username": "farooq",
-                "email": "farooq@teqniqly.com"
-            }),
-        content_type="application/json")
+        data=json.dumps({"username": "farooq", "email": "farooq@teqniqly.com"}),
+        content_type="application/json",
+    )
 
     data = json.loads(response.data.decode())
 
@@ -17,17 +14,16 @@ def test_add_user(test_app, test_database, test_client):
     assert "User farooq@teqniqly.com added" in data["message"]
 
 
-def test_when_user_exists_return_conflict(test_app, test_database, add_user, test_client):
+def test_when_user_exists_return_conflict(
+    test_app, test_database, add_user, test_client
+):
     add_user("farooq", "farooq@teqniqly.com")
 
     response = test_client.post(
         "/users",
-        data=json.dumps(
-            {
-                "username": "farooq",
-                "email": "farooq@teqniqly.com"
-            }),
-        content_type="application/json")
+        data=json.dumps({"username": "farooq", "email": "farooq@teqniqly.com"}),
+        content_type="application/json",
+    )
 
     data = json.loads(response.data.decode())
 
@@ -35,11 +31,12 @@ def test_when_user_exists_return_conflict(test_app, test_database, add_user, tes
     assert "User farooq@teqniqly.com is already registered" in data["message"]
 
 
-def test_when_user_missing_required_attributes_return_bad_request(test_app, test_database, test_client):
+def test_when_user_missing_required_attributes_return_bad_request(
+    test_app, test_database, test_client
+):
     response = test_client.post(
-        "/users",
-        data=json.dumps({}),
-        content_type="application/json")
+        "/users", data=json.dumps({}), content_type="application/json"
+    )
 
     data = json.loads(response.data.decode())
     errors = data["errors"]

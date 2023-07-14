@@ -26,20 +26,20 @@ class User(db.Model):
         self.email = email
 
 
-user = api.model("User", {
-    "id": fields.Integer(readOnly=True),
-    "username": fields.String(required=True),
-    "email": fields.String(required=True),
-    "created_date": fields.DateTime(),
-})
+user = api.model(
+    "User",
+    {
+        "id": fields.Integer(readOnly=True),
+        "username": fields.String(required=True),
+        "email": fields.String(required=True),
+        "created_date": fields.DateTime(),
+    },
+)
 
 
 class Ping(Resource):
     def get(self):
-        return {
-            "status": "success",
-            "message": "pong"
-        }
+        return {"status": "success", "message": "pong"}
 
 
 api.add_resource(Ping, "/ping")
@@ -55,7 +55,6 @@ api.add_resource(UsersList, "/users")
 
 
 class Users(Resource):
-
     @api.marshal_with(user)
     def get(self, user_id):
         existing_user = User.query.filter_by(id=user_id).first()
@@ -74,18 +73,14 @@ class Users(Resource):
         existing_user = User.query.filter_by(email=email).first()
 
         if existing_user:
-            error = {
-                "message": f"User {email} is already registered."
-            }
+            error = {"message": f"User {email} is already registered."}
 
             return error, 409
 
         db.session.add(User(username, email))
         db.session.commit()
 
-        created_user = {
-            "message": f"User {email} added."
-        }
+        created_user = {"message": f"User {email} added."}
 
         return created_user, 201
 
