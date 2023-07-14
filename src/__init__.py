@@ -38,12 +38,17 @@ class Ping(Resource):
 
 api.add_resource(Ping, "/ping")
 
-class Users(Resource):
+class UsersList(Resource):
     @api.marshal_with(user, as_list=True)
-    def get_all(self):
+    def get(self):
         return User.query.all(), 200
+
+api.add_resource(UsersList, "/users")
+
+class Users(Resource):
+
     @api.marshal_with(user)
-    def get_by_id(self, user_id):
+    def get(self, user_id):
         existing_user = User.query.filter_by(id=user_id).first()
 
         if not existing_user:
@@ -76,5 +81,5 @@ class Users(Resource):
         return created_user, 201
 
 
-api.add_resource(Users, "/users", endpoint="get_all", methods=["GET", "POST"])
-api.add_resource(Users, "/users/<int:user_id>",  endpoint="get_by_id", methods=["GET"])
+api.add_resource(Users, "/users")
+api.add_resource(Users, "/users/<int:user_id>")
