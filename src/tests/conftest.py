@@ -1,6 +1,6 @@
 import pytest
 
-from src import app, db, User
+from src import User, app, db
 
 
 @pytest.fixture(scope="module")

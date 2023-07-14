@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, request
-from flask_restx import Resource, Api, fields
+from flask_restx import Api, Resource, fields
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 
