@@ -2,6 +2,7 @@ import pytest
 
 from src import app, db, User
 
+
 @pytest.fixture(scope="module")
 def test_app():
     app.config.from_object("src.config.TestConfig")
@@ -9,12 +10,14 @@ def test_app():
     with app.app_context():
         yield app
 
+
 @pytest.fixture(scope="function")
 def test_client():
     app.config.from_object("src.config.TestConfig")
 
     with app.app_context():
         yield app.test_client()
+
 
 @pytest.fixture(scope="function")
 def test_database():

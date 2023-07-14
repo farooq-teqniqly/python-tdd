@@ -1,6 +1,6 @@
 import os
 
-from flask import  Flask, jsonify, request
+from flask import Flask, request
 from flask_restx import Resource, Api, fields
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
@@ -11,6 +11,7 @@ app_settings = os.getenv("APP_SETTINGS")
 app.config.from_object(app_settings)
 
 db = SQLAlchemy(app)
+
 
 class User(db.Model):
     __tablename__ = "users"
@@ -24,12 +25,14 @@ class User(db.Model):
         self.username = username
         self.email = email
 
+
 user = api.model("User", {
     "id": fields.Integer(readOnly=True),
     "username": fields.String(required=True),
     "email": fields.String(required=True),
     "created_date": fields.DateTime(),
 })
+
 
 class Ping(Resource):
     def get(self):
@@ -38,14 +41,18 @@ class Ping(Resource):
             "message": "pong"
         }
 
+
 api.add_resource(Ping, "/ping")
+
 
 class UsersList(Resource):
     @api.marshal_with(user, as_list=True)
     def get(self):
         return User.query.all(), 200
 
+
 api.add_resource(UsersList, "/users")
+
 
 class Users(Resource):
 
