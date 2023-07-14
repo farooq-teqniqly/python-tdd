@@ -19,7 +19,9 @@ def test_add_user(test_app, test_database):
     assert response.status_code == 201
     assert "User farooq@teqniqly.com added" in data["message"]
 
-def test_when_user_exists_return_conflict(test_app, test_database):
+def test_when_user_exists_return_conflict(test_app, test_database, add_user):
+    add_user("farooq", "farooq@teqniqly.com")
+
     client = test_app.test_client()
 
     response = client.post(
